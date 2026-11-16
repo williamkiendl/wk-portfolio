@@ -1,0 +1,12 @@
+---
+/**
+ * "Not found" page, shown for any address that does not exist.
+ * Both lines of text come from site.labels in site.config.ts.
+ */
+import { site } from "@config";
+import Page from "@/layouts/Page.astro";
+---
+
+<Page title={site.labels.notFound}>
+  <p><a href="/">{site.labels.backHome}</a></p>
+</Page>

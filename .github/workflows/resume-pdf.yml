@@ -1,0 +1,89 @@
+# Resume PDF
+#
+# Rebuilds public/resume.pdf from the /resume page and opens a pull request
+# with the new file. You look at the PDF in the pull request's preview link,
+# then merge it like any other change.
+#
+# It runs in two cases:
+#   1. By hand: Actions tab > "Resume PDF" > "Run workflow".
+#   2. Automatically, when the resume words or the site's looks change on main.
+#
+# One-time setting this needs (see README.md, "One-time setup"):
+#   Settings > Actions > General > Workflow permissions >
+#   tick "Allow GitHub Actions to create and approve pull requests".
+
+name: Resume PDF
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - content/resume.json
+      - tokens.json
+      - src/styles/**
+
+# Allowed to add a branch and open a pull request. Nothing else.
+permissions:
+  contents: write
+  pull-requests: write
+
+# Only one PDF run at a time. A newer run replaces an older one.
+concurrency:
+  group: resume-pdf
+  cancel-in-progress: true
+
+jobs:
+  pdf:
+    name: Rebuild resume PDF
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      # Get a copy of the repo onto the machine.
+      - name: Get the code
+        uses: actions/checkout@v7
+
+      # Install Node.js 22 and reuse previously downloaded packages.
+      - name: Set up Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+
+      # Install the exact package versions listed in package-lock.json.
+      - name: Install packages
+        run: npm ci
+
+      # Build the site so the /resume page exists in the dist folder.
+      - name: Build the site
+        run: npm run build
+
+      # Install the PDF tool and its browser. This is done here, and not in
+      # package.json, so the normal site build stays small and fast.
+      - name: Install the PDF tool (Playwright and Chromium)
+        run: |
+          npm install --no-save playwright@1
+          npx playwright install --with-deps chromium
+
+      # Open /resume in the browser and save it as public/resume.pdf.
+      - name: Create the PDF
+        run: npm run pdf
+
+      # Open a pull request containing only the PDF. If a PDF pull request
+      # is already open, it is updated instead of opening a second one.
+      - name: Open a pull request with the new PDF
+        uses: peter-evans/create-pull-request@v8
+        with:
+          add-paths: public/resume.pdf
+          branch: automated/resume-pdf
+          delete-branch: true
+          commit-message: Update resume PDF
+          title: Update resume PDF
+          body: |
+            The resume PDF was rebuilt from the current /resume page.
+
+            Before merging: open the Vercel preview link below, add
+            /resume.pdf to the end of the address, and check the page breaks.
+
+            Note: the usual green "Check" tick does not run on this pull
+            request. That is expected, because it only changes one PDF file.

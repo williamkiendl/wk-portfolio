@@ -1,0 +1,131 @@
+---
+/**
+ * CaseStudy.astro
+ * The layout of one case study page: a title block (company, title, role,
+ * years, outcome, tags), the hero image, the written body, an optional
+ * gallery, and links to the previous and next case study.
+ *
+ * The page text (the Markdown below the second --- line of the content
+ * file) is placed where <slot /> is. A very short body and a very long
+ * body both work: the body column simply grows.
+ */
+import Base from "./Base.astro";
+import Text from "@/components/Text.astro";
+import Prose from "@/components/Prose.astro";
+import Gallery from "@/components/Gallery.astro";
+import PrevNext from "@/components/PrevNext.astro";
+
+type PageLink = { title: string; href: string } | null;
+
+interface Props {
+  title: string;
+  company: string;
+  role: string;
+  years: string;
+  outcome: string;
+  hero?: string;
+  heroAlt?: string;
+  gallery?: { src: string; alt: string }[];
+  tags?: string[];
+  prev: PageLink;
+  next: PageLink;
+}
+const {
+  title,
+  company,
+  role,
+  years,
+  outcome,
+  hero,
+  heroAlt = "",
+  gallery = [],
+  tags = [],
+  prev,
+  next,
+} = Astro.props;
+---
+
+<Base title={title} description={outcome} image={hero} type="article">
+  <article class="container study">
+    <header class="head">
+      <p class="company"><Text value={company} /></p>
+      <h1><Text value={title} /></h1>
+      <ul role="list" class="facts">
+        <li><Text value={role} /></li>
+        <li><Text value={years} /></li>
+      </ul>
+      <p class="outcome"><Text value={outcome} /></p>
+      {
+        tags.length > 0 && (
+          <ul role="list" class="tags">
+            {tags.map((tag) => (
+              <li class="tag">
+                <Text value={tag} />
+              </li>
+            ))}
+          </ul>
+        )
+      }
+    </header>
+
+    {/* The hero image loads straight away; gallery images are lazy. */}
+    {hero && <img class="hero" src={hero} alt={heroAlt} loading="eager" decoding="async" />}
+
+    <Prose>
+      <slot />
+    </Prose>
+
+    <Gallery images={gallery} />
+
+    <PrevNext prev={prev} next={next} />
+  </article>
+</Base>
+
+<style>
+  .study {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-12);
+    padding-block: var(--space-12);
+  }
+
+  .head {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .company {
+    color: var(--color-ink-muted);
+  }
+
+  .facts,
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-1) var(--space-6);
+  }
+
+  .facts {
+    color: var(--color-ink-muted);
+  }
+
+  .outcome {
+    max-width: var(--grid-measure);
+    font-size: var(--text-lg);
+  }
+
+  .tags {
+    gap: var(--space-2);
+  }
+
+  .tag {
+    padding: var(--space-1) var(--space-3);
+    border: var(--border-width) solid var(--color-line);
+    font-size: var(--text-sm);
+  }
+
+  .hero {
+    width: 100%;
+  }
+</style>

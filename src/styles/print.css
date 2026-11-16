@@ -1,0 +1,93 @@
+/*
+ * print.css
+ *
+ * Rules that apply only when a page is printed or saved as a PDF. The resume
+ * PDF is the /resume page printed, so these rules shape that file.
+ *
+ * Because the PDF is the same page, it uses the same tokens (fonts, sizes,
+ * spacing) as the site. Only the things below change for paper.
+ */
+
+/*
+ * Paper size and margins. CSS does not reliably allow var(--token) inside
+ * @page, so the margin is written out here. This is the one place a literal
+ * value is expected.
+ */
+@page {
+  size: letter;
+  margin: 0.5in;
+}
+
+@media print {
+  /*
+   * Black text on white paper, whatever the theme. This re-points the color
+   * tokens while printing, so every component follows without extra rules.
+   */
+  :root,
+  :root[data-theme] {
+    --color-bg: #ffffff;
+    --color-surface: #ffffff;
+    --color-ink: #000000;
+    --color-ink-muted: #000000;
+    --color-accent: #000000;
+    --color-line: #000000;
+  }
+
+  html,
+  body {
+    background: var(--color-bg);
+    color: var(--color-ink);
+  }
+
+  body {
+    min-height: 0;
+  }
+
+  /* Print colors as written instead of letting the browser adjust them. */
+  * {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+
+  /* Anything marked data-print="hide" (nav, footer, download button). */
+  [data-print="hide"] {
+    display: none !important;
+  }
+
+  /* Links read as plain text on paper. */
+  a,
+  a:visited {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  /* On paper the content uses the full width inside the page margins. */
+  .container {
+    max-width: none;
+    padding-inline: 0;
+  }
+
+  /* Never split one resume entry across two pages. */
+  [data-resume-entry] {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  /* Never leave a heading alone at the bottom of a page. */
+  h1,
+  h2,
+  h3,
+  h4 {
+    break-after: avoid;
+    page-break-after: avoid;
+  }
+
+  /* Avoid a single stray line at the top or bottom of a page. */
+  p,
+  li {
+    orphans: 3;
+    widows: 3;
+  }
+}

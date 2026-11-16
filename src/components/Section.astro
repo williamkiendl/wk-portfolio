@@ -1,0 +1,80 @@
+---
+/**
+ * Section.astro
+ * The wrapper for every numbered section on the home page.
+ *
+ * THE DEVICE SEAM: the number and the label are two separate elements,
+ * marked data-section-index and data-section-label. A theme restyles them
+ * in src/styles/theme.<name>.css without touching this file.
+ *
+ * Props
+ *   index     position on the page, starting at 1 (shown as 01, 02, ...)
+ *   id        the anchor, e.g. "work" for /#work
+ *   label     the visible section title
+ *   intro     optional one-line introduction under the title
+ *   labelTag  "h2" (default) or "p". The first section uses "p" because the
+ *             page's main heading (h1) sits inside it.
+ */
+import Text from "./Text.astro";
+
+interface Props {
+  index: number;
+  id: string;
+  label: string;
+  intro?: string;
+  labelTag?: "h2" | "p";
+}
+const { index, id, label, intro, labelTag: LabelTag = "h2" } = Astro.props;
+
+const number = String(index).padStart(2, "0");
+const labelId = `${id}-label`;
+---
+
+<section id={id} aria-labelledby={labelId} class="section">
+  <div class="container">
+    <header class="head">
+      <span class="index" data-section-index>{number}</span>
+      <LabelTag id={labelId} class="label" data-section-label><Text value={label} /></LabelTag>
+    </header>
+    {intro && <p class="intro"><Text value={intro} /></p>}
+    <div class="body">
+      <slot />
+    </div>
+  </div>
+</section>
+
+<style>
+  .section {
+    padding-block: var(--space-12);
+    border-block-start: var(--border-width) solid var(--color-line);
+  }
+
+  .head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: var(--space-3);
+  }
+
+  .index {
+    font-family: var(--font-mono);
+    color: var(--color-ink-muted);
+  }
+
+  .label {
+    font-family: var(--font-display);
+    font-size: var(--text-xl);
+    font-weight: var(--weight-bold);
+    line-height: var(--leading-tight);
+  }
+
+  .intro {
+    max-width: var(--grid-measure);
+    margin-block-start: var(--space-3);
+    color: var(--color-ink-muted);
+  }
+
+  .body {
+    margin-block-start: var(--space-8);
+  }
+</style>

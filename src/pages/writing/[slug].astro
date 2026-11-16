@@ -1,0 +1,34 @@
+---
+/**
+ * One post page (/writing/<file-name>).
+ * A page is built for every file in content/writing/ with draft: false.
+ * With no posts yet, no pages are built, and that is fine.
+ */
+import { getCollection, render } from "astro:content";
+import { site } from "@config";
+import { formatPostDate, isoDate } from "@/lib/dates";
+import Page from "@/layouts/Page.astro";
+import Prose from "@/components/Prose.astro";
+
+export async function getStaticPaths() {
+  const posts = await getCollection("writing", (entry) => !entry.data.draft);
+  return posts.map((post) => ({ params: { slug: post.id }, props: { post } }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+---
+
+<Page title={post.data.title} description={post.data.summary} type="article">
+  <time slot="meta" datetime={isoDate(post.data.date)}>{formatPostDate(post.data.date)}</time>
+  <Prose>
+    <Content />
+  </Prose>
+  <p class="back"><a href="/writing">{site.labels.writing}</a></p>
+</Page>
+
+<style>
+  .back {
+    margin-block-start: var(--space-12);
+  }
+</style>

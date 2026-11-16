@@ -1,0 +1,74 @@
+---
+/**
+ * CareerList.astro
+ * A numbered list of jobs for the home page: company, title, years.
+ * The entries come from content/resume.json (those with showOnHome true).
+ *
+ * Props
+ *   entries  [{ org, role, start, end }]
+ */
+import { formatRange } from "@/lib/dates";
+import Text from "./Text.astro";
+
+interface Props {
+  entries: { org: string; role: string; start: string; end: string }[];
+}
+const { entries } = Astro.props;
+---
+
+{/* A real ordered list. The numbers are the browser's own list numbers. */}
+<ol class="list">
+  {
+    entries.map((entry) => (
+      <li class="item">
+        <div class="grid row">
+          <span class="org">
+            <Text value={entry.org} />
+          </span>
+          <span class="role">
+            <Text value={entry.role} />
+          </span>
+          <span class="years">{formatRange(entry.start, entry.end)}</span>
+        </div>
+      </li>
+    ))
+  }
+</ol>
+
+<style>
+  .item {
+    padding-block: var(--space-3);
+    border-block-end: var(--border-width) solid var(--color-line);
+  }
+
+  .item::marker {
+    font-family: var(--font-mono);
+    color: var(--color-ink-muted);
+  }
+
+  .org {
+    grid-column: span 4;
+    font-weight: var(--weight-bold);
+  }
+
+  .role {
+    grid-column: span 5;
+  }
+
+  .years {
+    grid-column: span 3;
+    color: var(--color-ink-muted);
+  }
+
+  @media (max-width: 48rem) {
+    .row {
+      gap: var(--space-1);
+    }
+
+    .org,
+    .role,
+    .years {
+      grid-column: 1 / -1;
+    }
+  }
+</style>

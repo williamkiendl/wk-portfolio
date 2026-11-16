@@ -1,0 +1,24 @@
+# Home page copy. Every line in square brackets is waiting on final copy.
+# Replace the whole quoted string, keep the quotes, and stay inside the length noted.
+
+hero:
+  greeting: "[PLACEHOLDER: hero greeting, 2-6 words]"
+  valueProp: "[PLACEHOLDER: value proposition, 60-110 chars]"
+  # Path to the portrait image inside the public/ folder.
+  portrait: "/portrait-placeholder.svg"
+  portraitAlt: "[PLACEHOLDER: portrait description for screen readers, 5-15 words]"
+
+# Optional one-line introductions under each home section title.
+# Delete a line to show no introduction for that section.
+intros:
+  work: "[PLACEHOLDER: selected work section intro, 0-160 chars, optional]"
+  more: "[PLACEHOLDER: additional work section intro, 0-160 chars, optional]"
+  library: "[PLACEHOLDER: reference library section intro, 0-160 chars, optional]"
+  career: "[PLACEHOLDER: career history section intro, 0-160 chars, optional]"
+
+contact:
+  headline: "[PLACEHOLDER: contact headline, 3 words to 40 chars]"
+
+# Introduction at the top of the All work page (/work). Optional.
+workIndex:
+  intro: "[PLACEHOLDER: all work page intro, 0-160 chars, optional]"

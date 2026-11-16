@@ -1,0 +1,120 @@
+---
+/**
+ * Hero.astro
+ * The introduction at the top of the home page. It holds the page's one
+ * main heading (h1), which is the name.
+ *
+ * Props
+ *   greeting     short line above the name (content/home.yaml)
+ *   name         the name (site.config.ts)
+ *   title        job title (site.config.ts)
+ *   location     where you are based (site.config.ts)
+ *   valueProp    one-line value proposition (content/home.yaml)
+ *   headerLines  the tagline split into display lines (site.config.ts)
+ *   portrait     optional image path inside public/
+ *   portraitAlt  description of the portrait for screen readers
+ */
+import Text from "./Text.astro";
+
+interface Props {
+  greeting: string;
+  name: string;
+  title: string;
+  location: string;
+  valueProp: string;
+  portrait?: string;
+  portraitAlt?: string;
+  headerLines?: readonly string[];
+}
+const {
+  greeting,
+  name,
+  title,
+  location,
+  valueProp,
+  portrait,
+  portraitAlt = "",
+  headerLines = [],
+} = Astro.props;
+---
+
+<div class="grid hero">
+  <div class="copy">
+    <p class="greeting"><Text value={greeting} /></p>
+    <h1><Text value={name} /></h1>
+    <p class="role">
+      <span class="line"><Text value={title} /></span>
+      <span class="line"><Text value={location} /></span>
+    </p>
+    {
+      headerLines.length > 0 && (
+        <p class="header-lines">
+          {headerLines.map((line) => (
+            <span class="line">
+              <Text value={line} />
+            </span>
+          ))}
+        </p>
+      )
+    }
+    <p class="value"><Text value={valueProp} /></p>
+  </div>
+  {
+    portrait && (
+      <div class="portrait">
+        {/* The hero image loads straight away; every other image is lazy. */}
+        <img src={portrait} alt={portraitAlt} loading="eager" decoding="async" />
+      </div>
+    )
+  }
+</div>
+
+<style>
+  .hero {
+    align-items: start;
+  }
+
+  .copy {
+    grid-column: span 8;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+
+  .portrait {
+    grid-column: span 4;
+  }
+
+  .portrait img {
+    width: 100%;
+  }
+
+  /* Each line of a multi-line string sits on its own row. */
+  .line {
+    display: block;
+  }
+
+  .greeting,
+  .role {
+    color: var(--color-ink-muted);
+  }
+
+  .header-lines {
+    font-family: var(--font-display);
+    font-size: var(--text-2xl);
+    font-weight: var(--weight-bold);
+    line-height: var(--leading-tight);
+  }
+
+  .value {
+    max-width: var(--grid-measure);
+    font-size: var(--text-lg);
+  }
+
+  @media (max-width: 48rem) {
+    .copy,
+    .portrait {
+      grid-column: 1 / -1;
+    }
+  }
+</style>

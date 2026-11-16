@@ -1,0 +1,55 @@
+# Check
+#
+# Runs on every pull request and every change to main. It builds the site and
+# runs the three safety checks. A green tick means it is safe to merge.
+# A red X means something needs fixing: click it, then "Details", and read the
+# last lines of the step that failed. See README.md, "When a deploy fails".
+
+name: Check
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+# This workflow only reads the repo. It cannot change anything.
+permissions:
+  contents: read
+
+# If you push again while a check is still running, stop the old one.
+concurrency:
+  group: check-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    name: Build and check
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      # Get a copy of the repo onto the machine.
+      - name: Get the code
+        uses: actions/checkout@v7
+
+      # Install Node.js 22 (the tool that runs the build) and reuse
+      # previously downloaded packages so the run is faster.
+      - name: Set up Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+
+      # Install the exact package versions listed in package-lock.json.
+      - name: Install packages
+        run: npm ci
+
+      # Build the whole site, the same way Vercel does. Fails if a content
+      # file is missing a required field.
+      - name: Build the site
+        run: npm run build
+
+      # Run the checks: no raw design values outside the theme (token check),
+      # no personal details outside site.config.ts (fork check), and no
+      # code errors (astro check).
+      - name: Run the checks
+        run: npm run check

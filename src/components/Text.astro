@@ -1,0 +1,19 @@
+---
+/**
+ * Text.astro
+ * Prints one content string. If the string is still a placeholder (it starts
+ * with "[PLACEHOLDER"), it is wrapped in class="placeholder" so it stands
+ * out on the page. Use this wherever a string from site.config.ts or the
+ * content folder is shown.
+ *
+ * Usage: <Text value={entry.data.title} />
+ */
+import { isPlaceholder } from "@/lib/placeholder";
+
+interface Props {
+  value?: string;
+}
+const { value } = Astro.props;
+---
+
+{value && (isPlaceholder(value) ? <span class="placeholder">{value}</span> : value)}

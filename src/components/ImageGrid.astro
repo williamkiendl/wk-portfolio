@@ -1,0 +1,56 @@
+---
+/**
+ * ImageGrid.astro
+ * A grid of images with no visible captions (the Reference library).
+ * Images keep their own shape: nothing is cropped, so tall and wide images
+ * can sit side by side. The caption is still there for screen readers and
+ * appears as a tooltip on hover.
+ *
+ * Props
+ *   images  [{ src, alt, caption? }]
+ */
+interface Props {
+  images: { src: string; alt: string; caption?: string }[];
+}
+const { images } = Astro.props;
+---
+
+<ul role="list" class="grid images">
+  {
+    images.map((image) => (
+      <li class="cell">
+        <figure>
+          <img
+            src={image.src}
+            alt={image.alt}
+            title={image.caption}
+            loading="lazy"
+            decoding="async"
+          />
+          {image.caption && <figcaption class="visually-hidden">{image.caption}</figcaption>}
+        </figure>
+      </li>
+    ))
+  }
+</ul>
+
+<style>
+  /* Rows line up along the top edge, so shorter images leave space below. */
+  .images {
+    align-items: start;
+  }
+
+  .cell {
+    grid-column: span 3;
+  }
+
+  .cell img {
+    width: 100%;
+  }
+
+  @media (max-width: 48rem) {
+    .cell {
+      grid-column: span 6;
+    }
+  }
+</style>

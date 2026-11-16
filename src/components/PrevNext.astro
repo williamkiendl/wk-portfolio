@@ -1,0 +1,99 @@
+---
+/**
+ * PrevNext.astro
+ * Links to the previous and next case study, plus a link to All work.
+ * Either side can be missing (first and last case study).
+ *
+ * Props
+ *   prev  { title, href } or null
+ *   next  { title, href } or null
+ */
+import { site } from "@config";
+import Text from "./Text.astro";
+
+type PageLink = { title: string; href: string } | null;
+
+interface Props {
+  prev: PageLink;
+  next: PageLink;
+}
+const { prev, next } = Astro.props;
+---
+
+<nav class="prev-next" aria-label={site.labels.caseStudyNav}>
+  <div class="grid">
+    <div class="side">
+      {
+        prev && (
+          <a href={prev.href} rel="prev">
+            <span class="direction">{site.labels.previous}</span>
+            <span class="title">
+              <Text value={prev.title} />
+            </span>
+          </a>
+        )
+      }
+    </div>
+    <div class="side end">
+      {
+        next && (
+          <a href={next.href} rel="next">
+            <span class="direction">{site.labels.next}</span>
+            <span class="title">
+              <Text value={next.title} />
+            </span>
+          </a>
+        )
+      }
+    </div>
+  </div>
+  <p class="all"><a href="/work">{site.labels.allWork}</a></p>
+</nav>
+
+<style>
+  .prev-next {
+    padding-block-start: var(--space-8);
+    border-block-start: var(--border-width) solid var(--color-line);
+  }
+
+  .side {
+    grid-column: span 6;
+  }
+
+  .end {
+    text-align: end;
+  }
+
+  .side a {
+    display: inline-block;
+    padding-block: var(--space-2);
+  }
+
+  .direction,
+  .title {
+    display: block;
+  }
+
+  .direction {
+    font-size: var(--text-sm);
+    color: var(--color-ink-muted);
+  }
+
+  .all {
+    margin-block-start: var(--space-6);
+  }
+
+  @media (max-width: 48rem) {
+    .side {
+      grid-column: 1 / -1;
+    }
+
+    .side:empty {
+      display: none;
+    }
+
+    .end {
+      text-align: start;
+    }
+  }
+</style>

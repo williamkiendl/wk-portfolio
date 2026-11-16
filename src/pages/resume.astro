@@ -1,0 +1,162 @@
+---
+/**
+ * Resume page (/resume).
+ * Built from content/resume.json and the identity fields in site.config.ts.
+ * The downloadable PDF is this same page printed (npm run pdf), so anything
+ * marked data-print="hide" is left out of the PDF.
+ */
+import { getEntry } from "astro:content";
+import { site } from "@config";
+import { isPlaceholder } from "@/lib/placeholder";
+import Base from "@/layouts/Base.astro";
+import ResumeEntry from "@/components/ResumeEntry.astro";
+import SkillsStrip from "@/components/SkillsStrip.astro";
+import Text from "@/components/Text.astro";
+
+const resume = (await getEntry("resume", "resume"))!.data;
+const { email, linkedin, resumePdf } = site.contact;
+// The phone line may be deleted from site.config.ts, or still be a
+// placeholder. Either way it is left off the resume.
+const phoneValue: string | undefined = (site.contact as { phone?: string }).phone;
+const phone = phoneValue && !isPlaceholder(phoneValue) ? phoneValue : undefined;
+---
+
+<Base title={site.contact.resume.label} description={resume.summary}>
+  <article class="container resume">
+    <header class="head">
+      <div class="identity">
+        <h1><Text value={site.name} /></h1>
+        <p class="headline"><Text value={resume.headline} /></p>
+      </div>
+      <ul role="list" class="contact-line">
+        <li><Text value={site.location} /></li>
+        <li><a href={`mailto:${email}`}>{email}</a></li>
+        {phone && <li><a href={`tel:${phone.replace(/[^+\d]/g, "")}`}>{phone}</a></li>}
+        {
+          /* Left out while the address is still a placeholder. */
+          !isPlaceholder(linkedin.href) && (
+            <li>
+              <a href={linkedin.href} rel="noopener">
+                {linkedin.label}
+              </a>
+            </li>
+          )
+        }
+      </ul>
+      <p data-print="hide">
+        <a href={resumePdf.href} download>{resumePdf.label}</a>
+      </p>
+    </header>
+
+    <section class="block" aria-labelledby="resume-summary">
+      <h2 id="resume-summary">{site.labels.summary}</h2>
+      <p class="summary"><Text value={resume.summary} /></p>
+    </section>
+
+    <section class="block" aria-labelledby="resume-experience">
+      <h2 id="resume-experience">{site.labels.experience}</h2>
+      <div class="entries">
+        {
+          resume.experience.map((entry) => (
+            <ResumeEntry
+              org={entry.org}
+              orgNote={entry.orgNote}
+              role={entry.role}
+              start={entry.start}
+              end={entry.end}
+              bullets={entry.bullets}
+            />
+          ))
+        }
+      </div>
+    </section>
+
+    <section class="block" aria-labelledby="resume-expertise">
+      <h2 id="resume-expertise">{site.labels.expertise}</h2>
+      <div class="entries">
+        <SkillsStrip skills={resume.skills} label={site.labels.skills} />
+        <SkillsStrip skills={resume.tools} label={site.labels.tools} />
+      </div>
+    </section>
+
+    <section class="block" aria-labelledby="resume-education">
+      <h2 id="resume-education">{site.labels.education}</h2>
+      <div class="entries">
+        {
+          resume.education.map((item) => (
+            <div data-resume-entry>
+              <h3 class="school"><Text value={item.school} /></h3>
+              <p><Text value={item.detail} /></p>
+            </div>
+          ))
+        }
+      </div>
+    </section>
+  </article>
+</Base>
+
+<style>
+  .resume {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-8);
+    padding-block: var(--space-12);
+  }
+
+  .head {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .headline {
+    margin-block-start: var(--space-1);
+    font-size: var(--text-lg);
+  }
+
+  .contact-line {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-1) var(--space-6);
+  }
+
+  .block h2 {
+    padding-block-end: var(--space-2);
+    border-block-end: var(--border-width) solid var(--color-line);
+    font-size: var(--text-xl);
+  }
+
+  .block > * + * {
+    margin-block-start: var(--space-4);
+  }
+
+  .summary {
+    max-width: var(--grid-measure);
+  }
+
+  .entries {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+  }
+
+  .school {
+    font-size: var(--text-lg);
+  }
+
+  /* On paper the resume is tighter, to keep the page count down. */
+  @media print {
+    .resume {
+      gap: var(--space-4);
+      padding-block: 0;
+    }
+
+    .summary {
+      max-width: none;
+    }
+
+    .entries {
+      gap: var(--space-3);
+    }
+  }
+</style>

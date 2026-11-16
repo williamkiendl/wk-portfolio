@@ -1,0 +1,47 @@
+# Reference library. One block per image. Images live in public/library/.
+# id       A unique short name, no spaces.
+# image    Path to the image inside public/, starting with /library/.
+# alt      Describe the image for screen readers.
+# caption  Optional, 3 words to 60 chars.
+# order    Position in the grid. 1 comes first.
+
+- id: "placeholder-01"
+  image: "/library/placeholder-01.svg"
+  alt: "[PLACEHOLDER: library image 1 description, 5-15 words]"
+  caption: "[PLACEHOLDER: library caption, 3 words to 60 chars]"
+  order: 1
+- id: "placeholder-02"
+  image: "/library/placeholder-02.svg"
+  alt: "[PLACEHOLDER: library image 2 description, 5-15 words]"
+  caption: "[PLACEHOLDER: library caption, 3 words to 60 chars]"
+  order: 2
+- id: "placeholder-03"
+  image: "/library/placeholder-03.svg"
+  alt: "[PLACEHOLDER: library image 3 description, 5-15 words]"
+  caption: "[PLACEHOLDER: library caption, 3 words to 60 chars]"
+  order: 3
+- id: "placeholder-04"
+  image: "/library/placeholder-04.svg"
+  alt: "[PLACEHOLDER: library image 4 description, 5-15 words]"
+  caption: "[PLACEHOLDER: library caption, 3 words to 60 chars]"
+  order: 4
+- id: "placeholder-05"
+  image: "/library/placeholder-05.svg"
+  alt: "[PLACEHOLDER: library image 5 description, 5-15 words]"
+  caption: "[PLACEHOLDER: library caption, 3 words to 60 chars]"
+  order: 5
+- id: "placeholder-06"
+  image: "/library/placeholder-06.svg"
+  alt: "[PLACEHOLDER: library image 6 description, 5-15 words]"
+  caption: "[PLACEHOLDER: library caption, 3 words to 60 chars]"
+  order: 6
+- id: "placeholder-07"
+  image: "/library/placeholder-07.svg"
+  alt: "[PLACEHOLDER: library image 7 description, 5-15 words]"
+  caption: "[PLACEHOLDER: library caption, 3 words to 60 chars]"
+  order: 7
+- id: "placeholder-08"
+  image: "/library/placeholder-08.svg"
+  alt: "[PLACEHOLDER: library image 8 description, 5-15 words]"
+  caption: "[PLACEHOLDER: library caption, 3 words to 60 chars]"
+  order: 8

@@ -1,0 +1,129 @@
+---
+/**
+ * Home page.
+ * Six numbered sections. Their order, anchors and titles come from
+ * site.sections in site.config.ts: reorder that list and this page follows.
+ * What goes INSIDE each section is decided here, by the section's id.
+ */
+import { getCollection, getEntry } from "astro:content";
+import { site } from "@config";
+import { getAllWork, workHref, toWorkRow } from "@/lib/work";
+import Base from "@/layouts/Base.astro";
+import Section from "@/components/Section.astro";
+import Hero from "@/components/Hero.astro";
+import WorkCard from "@/components/WorkCard.astro";
+import WorkList from "@/components/WorkList.astro";
+import ImageGrid from "@/components/ImageGrid.astro";
+import CareerList from "@/components/CareerList.astro";
+import SkillsStrip from "@/components/SkillsStrip.astro";
+import ContactRow from "@/components/ContactRow.astro";
+import Text from "@/components/Text.astro";
+
+const home = (await getEntry("home", "home"))!.data;
+const resume = (await getEntry("resume", "resume"))!.data;
+
+// Work is already sorted by `order`.
+const work = await getAllWork();
+const selected = work.filter((entry) => entry.data.featured && !entry.data.draft);
+const additional = work.filter((entry) => !entry.data.featured).map(toWorkRow);
+
+const library = (await getCollection("library"))
+  .sort((a, b) => a.data.order - b.data.order)
+  .map((entry) => ({ src: entry.data.image, alt: entry.data.alt, caption: entry.data.caption }));
+
+const career = resume.experience.filter((entry) => entry.showOnHome);
+
+// Optional one-line introductions, keyed by section id.
+const intros: Record<string, string | undefined> = home.intros;
+---
+
+<Base>
+  {
+    site.sections.map((section, position) => (
+      <Section
+        index={position + 1}
+        id={section.id}
+        label={section.label}
+        intro={intros[section.id]}
+        labelTag={section.id === "hero" ? "p" : "h2"}
+      >
+        {section.id === "hero" && (
+          <Hero
+            greeting={home.hero.greeting}
+            name={site.name}
+            title={site.title}
+            location={site.location}
+            valueProp={home.hero.valueProp}
+            portrait={home.hero.portrait}
+            portraitAlt={home.hero.portraitAlt}
+            headerLines={site.headerLines}
+          />
+        )}
+
+        {section.id === "work" && (
+          <ul role="list" class="grid cards">
+            {selected.map((entry) => (
+              <li class="card-cell">
+                <WorkCard
+                  title={entry.data.title}
+                  company={entry.data.company}
+                  outcome={entry.data.outcome}
+                  image={entry.data.hero}
+                  imageAlt={entry.data.heroAlt}
+                  href={workHref(entry)}
+                />
+              </li>
+            ))}
+          </ul>
+        )}
+
+        {section.id === "more" && <WorkList items={additional} />}
+
+        {section.id === "library" && <ImageGrid images={library} />}
+
+        {section.id === "career" && (
+          <div class="career">
+            <CareerList entries={career} />
+            <SkillsStrip skills={resume.skills} label={site.labels.skills} />
+          </div>
+        )}
+
+        {section.id === "contact" && (
+          <div class="contact">
+            <p class="headline">
+              <Text value={home.contact.headline} />
+            </p>
+            <ContactRow />
+          </div>
+        )}
+      </Section>
+    ))
+  }
+</Base>
+
+<style>
+  /* Selected work: two cards per row, one per row on phones. */
+  .card-cell {
+    grid-column: span 6;
+  }
+
+  .career,
+  .contact {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-8);
+  }
+
+  .headline {
+    font-family: var(--font-display);
+    font-size: var(--text-2xl);
+    font-weight: var(--weight-bold);
+    line-height: var(--leading-tight);
+  }
+
+  @media (max-width: 48rem) {
+    .card-cell {
+      grid-column: 1 / -1;
+    }
+  }
+</style>

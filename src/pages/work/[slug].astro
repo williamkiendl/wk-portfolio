@@ -1,0 +1,45 @@
+---
+/**
+ * One case study page (/work/<file-name>).
+ * A page is built for every file in content/work/ with draft: false.
+ * Adding a new file there is all it takes: no change is needed here.
+ */
+import { render } from "astro:content";
+import { getLiveWork, workHref, type WorkEntry } from "@/lib/work";
+import CaseStudy from "@/layouts/CaseStudy.astro";
+
+export async function getStaticPaths() {
+  // Featured first, then by `order`. Previous and next follow this order.
+  const entries = await getLiveWork();
+  const link = (entry?: WorkEntry) =>
+    entry ? { title: entry.data.title, href: workHref(entry) } : null;
+
+  return entries.map((entry, position) => ({
+    params: { slug: entry.id },
+    props: {
+      entry,
+      prev: link(entries[position - 1]),
+      next: link(entries[position + 1]),
+    },
+  }));
+}
+
+const { entry, prev, next } = Astro.props;
+const { Content } = await render(entry);
+---
+
+<CaseStudy
+  title={entry.data.title}
+  company={entry.data.company}
+  role={entry.data.role}
+  years={entry.data.years}
+  outcome={entry.data.outcome}
+  hero={entry.data.hero}
+  heroAlt={entry.data.heroAlt}
+  gallery={entry.data.gallery}
+  tags={entry.data.tags}
+  prev={prev}
+  next={next}
+>
+  <Content />
+</CaseStudy>

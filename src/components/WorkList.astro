@@ -1,0 +1,100 @@
+---
+/**
+ * WorkList.astro
+ * A plain list of projects, one row each: title, company, years.
+ * A row with comingSoon set shows the "Coming soon" label and has no link.
+ *
+ * Props
+ *   items  [{ title, company, years, href?, comingSoon }]
+ */
+import { site } from "@config";
+import Text from "./Text.astro";
+
+interface Props {
+  items: {
+    title: string;
+    company: string;
+    years: string;
+    href?: string;
+    comingSoon: boolean;
+  }[];
+}
+const { items } = Astro.props;
+---
+
+<ul role="list" class="list">
+  {
+    items.map((item) => (
+      <li class="grid row">
+        <span class="title">
+          {item.href && !item.comingSoon ? (
+            <a href={item.href}>
+              <Text value={item.title} />
+            </a>
+          ) : (
+            <Text value={item.title} />
+          )}
+        </span>
+        <span class="company">
+          <Text value={item.company} />
+        </span>
+        <span class="years">
+          <Text value={item.years} />
+        </span>
+        <span class="status">{item.comingSoon && site.labels.comingSoon}</span>
+      </li>
+    ))
+  }
+</ul>
+
+<style>
+  .row {
+    padding-block: var(--space-4);
+    border-block-end: var(--border-width) solid var(--color-line);
+  }
+
+  .row:first-child {
+    border-block-start: var(--border-width) solid var(--color-line);
+  }
+
+  .title {
+    grid-column: span 5;
+    font-weight: var(--weight-bold);
+  }
+
+  .company {
+    grid-column: span 3;
+  }
+
+  .years {
+    grid-column: span 2;
+  }
+
+  .status {
+    grid-column: span 2;
+  }
+
+  .company,
+  .years,
+  .status {
+    color: var(--color-ink-muted);
+  }
+
+  /* Phones: one column, each part on its own line. */
+  @media (max-width: 48rem) {
+    .row {
+      gap: var(--space-1);
+    }
+
+    .title,
+    .company,
+    .years,
+    .status {
+      grid-column: 1 / -1;
+    }
+
+    .status:empty {
+      display: none;
+    }
+  }
+</style>

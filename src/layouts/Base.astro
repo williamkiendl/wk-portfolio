@@ -1,0 +1,52 @@
+---
+/**
+ * Base.astro
+ * The shell around every page: <html>, the <head> tags, the skip link, the
+ * header, the main content area and the footer.
+ *
+ * Props (all optional, passed straight to Seo.astro)
+ *   title, description, image, type
+ */
+import "@/styles/global.css";
+import { site } from "@config";
+import Seo from "@/components/Seo.astro";
+import Nav from "@/components/Nav.astro";
+import Footer from "@/components/Footer.astro";
+
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  type?: "website" | "article";
+}
+const { title, description, image, type } = Astro.props;
+
+// Visitor counting is off unless site.features.pageviews is filled in.
+const pageviews = site.features.pageviews;
+---
+
+<!doctype html>
+<html lang={site.locale} data-theme={site.theme}>
+  <head>
+    <Seo title={title} description={description} image={image} type={type} />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">{site.labels.skipToContent}</a>
+    <Nav />
+    <main id="main">
+      <slot />
+    </main>
+    <Footer />
+    {
+      /* The only script on the site, and only when pageviews is switched on. */
+      pageviews && pageviews.provider === "goatcounter" && (
+        <script
+          is:inline
+          async
+          data-goatcounter={`https://${pageviews.code}.goatcounter.com/count`}
+          src="https://gc.zgo.at/count.js"
+        />
+      )
+    }
+  </body>
+</html>

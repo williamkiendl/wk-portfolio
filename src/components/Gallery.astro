@@ -1,0 +1,46 @@
+---
+/**
+ * Gallery.astro
+ * The extra images at the end of a case study. Images keep their own shape.
+ * Renders nothing when the list is empty.
+ *
+ * Props
+ *   images  [{ src, alt }]
+ */
+interface Props {
+  images: { src: string; alt: string }[];
+}
+const { images } = Astro.props;
+---
+
+{
+  images.length > 0 && (
+    <ul role="list" class="grid gallery">
+      {images.map((image) => (
+        <li class="cell">
+          <img src={image.src} alt={image.alt} loading="lazy" decoding="async" />
+        </li>
+      ))}
+    </ul>
+  )
+}
+
+<style>
+  .gallery {
+    align-items: start;
+  }
+
+  .cell {
+    grid-column: span 6;
+  }
+
+  .cell img {
+    width: 100%;
+  }
+
+  @media (max-width: 48rem) {
+    .cell {
+      grid-column: 1 / -1;
+    }
+  }
+</style>

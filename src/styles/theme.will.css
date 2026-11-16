@@ -1,0 +1,37 @@
+/*
+ * theme.will.css
+ *
+ * Extra rules for the "will" theme. It is empty until the art direction is chosen.
+ * It is active when site.config.ts has  theme: "will".
+ *
+ * WHAT BELONGS IN tokens.json INSTEAD
+ * Anything that is one simple value: a color, a font stack, a size, a
+ * spacing step, a weight, a radius, a duration. Change it there, in the
+ * "will" group, and run `npm run tokens`.
+ *
+ * WHAT BELONGS HERE
+ * Anything a single value cannot express:
+ *   - Font loading. An @font-face block that points at a font file in
+ *     public/fonts/. (The font's NAME still goes in tokens.json.)
+ *   - The section label device. Every home page section marks its title
+ *     with [data-section-label] and its number with [data-section-index].
+ *     Style those two hooks here to change how section labels look.
+ *   - Any other rule that needs more than a token, such as a texture, a
+ *     hover treatment or a special underline.
+ *
+ * THE ONE RULE
+ * Every selector in this file starts with  :root[data-theme="will"]
+ * so it can never leak into another theme. @font-face is the only
+ * exception, because CSS does not allow it to be scoped.
+ *
+ * Example (remove the comment marks to use it):
+ *
+ * :root[data-theme="will"] [data-section-index] {
+ *   font-family: var(--font-mono);
+ *   color: var(--color-ink-muted);
+ * }
+ *
+ * :root[data-theme="will"] [data-section-label] {
+ *   font-size: var(--text-sm);
+ * }
+ */

@@ -1,0 +1,78 @@
+---
+/**
+ * ResumeEntry.astro
+ * One job on the resume page: organisation, a short note about it, the
+ * role, the dates and the bullet points.
+ * data-resume-entry lets the print rules keep an entry on one page.
+ *
+ * Props
+ *   org, orgNote?, role, start, end, bullets
+ */
+import { formatRange } from "@/lib/dates";
+import Text from "./Text.astro";
+
+interface Props {
+  org: string;
+  orgNote?: string;
+  role: string;
+  start: string;
+  end: string;
+  bullets?: string[];
+}
+const { org, orgNote, role, start, end, bullets = [] } = Astro.props;
+---
+
+<article class="entry" data-resume-entry>
+  <header class="head">
+    <h3 class="org"><Text value={org} /></h3>
+    <p class="dates">{formatRange(start, end)}</p>
+  </header>
+  <p class="role"><Text value={role} /></p>
+  {orgNote && <p class="note"><Text value={orgNote} /></p>}
+  {
+    bullets.length > 0 && (
+      <ul class="bullets">
+        {bullets.map((bullet) => (
+          <li>
+            <Text value={bullet} />
+          </li>
+        ))}
+      </ul>
+    )
+  }
+</article>
+
+<style>
+  .head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-1) var(--space-4);
+  }
+
+  .org {
+    font-size: var(--text-lg);
+  }
+
+  .dates,
+  .note {
+    color: var(--color-ink-muted);
+  }
+
+  .role {
+    font-weight: var(--weight-medium);
+  }
+
+  .note {
+    font-size: var(--text-sm);
+  }
+
+  .bullets {
+    margin-block-start: var(--space-2);
+  }
+
+  .bullets li + li {
+    margin-block-start: var(--space-1);
+  }
+</style>

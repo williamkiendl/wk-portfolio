@@ -1,0 +1,68 @@
+---
+/**
+ * ContactRow.astro
+ * The row of contact links: email, phone, LinkedIn, resume.
+ * Everything comes from site.contact in site.config.ts.
+ * A link whose address is still a placeholder is shown as marked text, not
+ * as a broken link.
+ */
+import { site } from "@config";
+import { isPlaceholder } from "@/lib/placeholder";
+import Text from "./Text.astro";
+
+const { email, linkedin, resume } = site.contact;
+// The phone line may be deleted from site.config.ts; then it is left out.
+const phone: string | undefined = (site.contact as { phone?: string }).phone;
+
+// A phone link needs digits only; a placeholder stays as it is (and is
+// then shown as marked text, not as a link).
+const phoneHref = phone && (isPlaceholder(phone) ? phone : `tel:${phone.replace(/[^+\d]/g, "")}`);
+
+// Each item: an optional small label, the visible text, and where it goes.
+type Item = { label?: string; text: string; href: string; external?: boolean };
+const items: Item[] = [
+  { label: site.labels.emailLabel, text: email, href: `mailto:${email}` },
+  ...(phone && phoneHref ? [{ label: site.labels.phoneLabel, text: phone, href: phoneHref }] : []),
+  { text: linkedin.label, href: linkedin.href, external: true },
+  { text: resume.label, href: resume.href },
+];
+---
+
+<ul role="list" class="row">
+  {
+    items.map((item) => (
+      <li>
+        {item.label && <span class="label">{item.label}</span>}
+        {isPlaceholder(item.href) ? (
+          <span>
+            {item.text !== item.href && item.text} <Text value={item.href} />
+          </span>
+        ) : (
+          <a href={item.href} rel={item.external ? "noopener" : undefined}>
+            <Text value={item.text} />
+          </a>
+        )}
+      </li>
+    ))
+  }
+</ul>
+
+<style>
+  .row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-4) var(--space-8);
+  }
+
+  .label {
+    display: block;
+    font-size: var(--text-sm);
+    color: var(--color-ink-muted);
+  }
+
+  @media (max-width: 40rem) {
+    .row {
+      flex-direction: column;
+    }
+  }
+</style>

@@ -1,0 +1,77 @@
+---
+/**
+ * WorkCard.astro
+ * One large card under Selected work. The whole card is one link.
+ *
+ * Props
+ *   title     project name (the link text)
+ *   company   who the work was for
+ *   outcome   one-line result
+ *   image     optional image path inside public/
+ *   imageAlt  description of the image for screen readers
+ *   href      the case study page
+ */
+import { site } from "@config";
+import Text from "./Text.astro";
+
+interface Props {
+  title: string;
+  company: string;
+  outcome: string;
+  image?: string;
+  imageAlt?: string;
+  href: string;
+}
+const { title, company, outcome, image, imageAlt = "", href } = Astro.props;
+---
+
+<article class="card">
+  {image && <img class="image" src={image} alt={imageAlt} loading="lazy" decoding="async" />}
+  <p class="company"><Text value={company} /></p>
+  <h3 class="title">
+    {/* The link's ::after covers the whole card, so the card is one big target. */}
+    <a class="link" href={href}><Text value={title} /></a>
+  </h3>
+  <p><Text value={outcome} /></p>
+  <p class="cue" aria-hidden="true">{site.labels.viewCaseStudy}</p>
+</article>
+
+<style>
+  .card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    height: 100%;
+    padding: var(--space-4);
+    border: var(--border-width) solid var(--color-line);
+    border-radius: var(--radius-none);
+  }
+
+  .image {
+    width: 100%;
+    margin-block-end: var(--space-2);
+  }
+
+  .company {
+    font-size: var(--text-sm);
+    color: var(--color-ink-muted);
+  }
+
+  .title {
+    font-size: var(--text-lg);
+  }
+
+  .link::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+  }
+
+  .cue {
+    margin-block-start: auto;
+    padding-block-start: var(--space-2);
+    font-size: var(--text-sm);
+    text-decoration: underline;
+  }
+</style>

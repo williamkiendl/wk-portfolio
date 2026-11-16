@@ -1,0 +1,67 @@
+---
+/**
+ * Seo.astro
+ * Everything that goes in the page <head> for search engines and link
+ * previews: the title, the description, the canonical address, the Open
+ * Graph and Twitter card tags, and the favicon.
+ *
+ * Props
+ *   title        the page name. Left out on the home page.
+ *   description  one sentence. Falls back to site.tagline.
+ *   image        share image path inside public/. Falls back to
+ *                /og-fallback.svg.
+ *   type         "website" (default) or "article"
+ *
+ * TODO (phase 3, parked): generated per-page share images. When a route
+ * such as src/pages/og/[...slug].png.ts exists, compute its address here
+ * and use it as the default for `shareImage` below, in place of
+ * FALLBACK_IMAGE. Most link previews do not show SVG files, so the fallback
+ * should also become a PNG at that point.
+ */
+import { site } from "@config";
+
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  type?: "website" | "article";
+}
+
+const FALLBACK_IMAGE = "/og-fallback.svg";
+
+const { title, description = site.tagline, image, type = "website" } = Astro.props;
+
+// "Page name | Site name", or "Site name | Job title" on the home page.
+const fullTitle = title
+  ? [title, site.name].join(site.labels.titleSeparator)
+  : [site.name, site.title].join(site.labels.titleSeparator);
+
+// Full addresses, built from `site` in astro.config.mjs and this page's path.
+const base = Astro.site ?? new URL(site.url);
+const path = Astro.url.pathname === "/" ? "/" : Astro.url.pathname.replace(/\/$/, "");
+const canonical = new URL(path, base).href;
+const shareImage = new URL(image ?? FALLBACK_IMAGE, base).href;
+---
+
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>{fullTitle}</title>
+<meta name="description" content={description} />
+<link rel="canonical" href={canonical} />
+<link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+<link rel="sitemap" href="/sitemap-index.xml" />
+
+{/* Open Graph: used by LinkedIn, Slack, iMessage and most other previews. */}
+<meta property="og:type" content={type} />
+<meta property="og:site_name" content={site.name} />
+<meta property="og:title" content={fullTitle} />
+<meta property="og:description" content={description} />
+<meta property="og:url" content={canonical} />
+<meta property="og:image" content={shareImage} />
+<meta property="og:locale" content={site.locale.replace("-", "_")} />
+
+{/* Twitter / X card. */}
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={fullTitle} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={shareImage} />

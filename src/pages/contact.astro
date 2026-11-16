@@ -1,0 +1,17 @@
+---
+/**
+ * Contact page (/contact).
+ * The contact headline from content/home.yaml and the contact links from
+ * site.config.ts. There is no form.
+ */
+import { getEntry } from "astro:content";
+import { site } from "@config";
+import Page from "@/layouts/Page.astro";
+import ContactRow from "@/components/ContactRow.astro";
+
+const home = (await getEntry("home", "home"))!.data;
+---
+
+<Page title={site.labels.contact} intro={home.contact.headline}>
+  <ContactRow />
+</Page>

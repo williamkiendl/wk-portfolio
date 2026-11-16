@@ -1,0 +1,65 @@
+---
+/**
+ * Nav.astro
+ * The site header: the site name (links home) and the main navigation.
+ * Links come from site.nav in site.config.ts. A Writing link is added only
+ * when site.features.writingInNav is true.
+ * The skip link lives in the Base layout, before this header.
+ */
+import { site } from "@config";
+
+const items: { label: string; href: string }[] = [...site.nav];
+if (site.features.writingInNav) {
+  items.push({ label: site.labels.writing, href: "/writing" });
+}
+
+// Marks the link for the page being viewed, for screen readers.
+const here = Astro.url.pathname.replace(/\/$/, "") || "/";
+---
+
+<header class="header" data-print="hide">
+  <div class="container bar">
+    <a class="name" href="/">{site.shortName}</a>
+    <nav aria-label={site.labels.mainNav}>
+      <ul role="list" class="links">
+        {
+          items.map((item) => (
+            <li>
+              <a href={item.href} aria-current={item.href === here ? "page" : undefined}>
+                {item.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<style>
+  .bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-2) var(--space-6);
+    padding-block: var(--space-4);
+  }
+
+  .name {
+    font-weight: var(--weight-bold);
+  }
+
+  .links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-1) var(--space-4);
+  }
+
+  /* Links get some height so they are easy to tap. */
+  .name,
+  .links a {
+    display: inline-block;
+    padding-block: var(--space-2);
+  }
+</style>

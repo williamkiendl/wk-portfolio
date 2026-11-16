@@ -1,0 +1,52 @@
+---
+/**
+ * SkillsStrip.astro
+ * A wrapping strip of short items (skills or tools) under a small heading.
+ *
+ * Props
+ *   skills   the list of items
+ *   label    the heading, e.g. site.labels.skills
+ *   heading  heading level to use, "h3" (default) or "h4"
+ */
+import Text from "./Text.astro";
+
+interface Props {
+  skills: readonly string[];
+  label: string;
+  heading?: "h3" | "h4";
+}
+const { skills, label, heading: Heading = "h3" } = Astro.props;
+---
+
+<div class="strip">
+  <Heading class="label">{label}</Heading>
+  <ul role="list" class="items">
+    {
+      skills.map((skill) => (
+        <li class="item">
+          <Text value={skill} />
+        </li>
+      ))
+    }
+  </ul>
+</div>
+
+<style>
+  .label {
+    font-size: var(--text-md);
+  }
+
+  .items {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    margin-block-start: var(--space-3);
+  }
+
+  .item {
+    padding: var(--space-1) var(--space-3);
+    border: var(--border-width) solid var(--color-line);
+    border-radius: var(--radius-none);
+    font-size: var(--text-sm);
+  }
+</style>

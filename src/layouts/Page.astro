@@ -1,0 +1,51 @@
+---
+/**
+ * Page.astro
+ * A simple page with one main heading and whatever is placed inside it.
+ * Used by All work, Contact, Writing and the "not found" page.
+ *
+ * Props
+ *   title        the main heading and the browser tab name
+ *   description  optional sentence for search engines
+ *   intro        optional line under the heading
+ */
+import Base from "./Base.astro";
+import Text from "@/components/Text.astro";
+
+interface Props {
+  title: string;
+  description?: string;
+  intro?: string;
+  type?: "website" | "article";
+}
+const { title, description, intro, type } = Astro.props;
+---
+
+<Base title={title} description={description} type={type}>
+  <div class="container page">
+    <header class="head">
+      <h1><Text value={title} /></h1>
+      {intro && <p class="intro"><Text value={intro} /></p>}
+      <slot name="meta" />
+    </header>
+    <slot />
+  </div>
+</Base>
+
+<style>
+  .page {
+    padding-block: var(--space-12);
+  }
+
+  .head {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    margin-block-end: var(--space-8);
+  }
+
+  .intro {
+    max-width: var(--grid-measure);
+    color: var(--color-ink-muted);
+  }
+</style>

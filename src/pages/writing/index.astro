@@ -1,0 +1,64 @@
+---
+/**
+ * Writing page (/writing).
+ * Lists every post in content/writing/ with draft: false, newest first.
+ * With no posts it shows the site.labels.writingEmpty line.
+ */
+import { getCollection } from "astro:content";
+import { site } from "@config";
+import { formatPostDate, isoDate } from "@/lib/dates";
+import Page from "@/layouts/Page.astro";
+import Text from "@/components/Text.astro";
+
+const posts = (await getCollection("writing", (entry) => !entry.data.draft)).sort(
+  (a, b) => b.data.date.getTime() - a.data.date.getTime(),
+);
+---
+
+<Page title={site.labels.writing}>
+  {
+    posts.length === 0 ? (
+      <p>
+        <Text value={site.labels.writingEmpty} />
+      </p>
+    ) : (
+      <ul role="list" class="posts">
+        {posts.map((post) => (
+          <li class="post">
+            <time datetime={isoDate(post.data.date)}>{formatPostDate(post.data.date)}</time>
+            <h2 class="title">
+              <a href={`/writing/${post.id}`}>
+                <Text value={post.data.title} />
+              </a>
+            </h2>
+            {post.data.summary && (
+              <p>
+                <Text value={post.data.summary} />
+              </p>
+            )}
+          </li>
+        ))}
+      </ul>
+    )
+  }
+</Page>
+
+<style>
+  .post {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    max-width: var(--grid-measure);
+    padding-block: var(--space-4);
+    border-block-end: var(--border-width) solid var(--color-line);
+  }
+
+  .post time {
+    font-size: var(--text-sm);
+    color: var(--color-ink-muted);
+  }
+
+  .title {
+    font-size: var(--text-lg);
+  }
+</style>

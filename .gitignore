@@ -1,0 +1,23 @@
+# Installed packages. Recreated by `npm install`.
+node_modules/
+
+# Build output. Recreated by `npm run build`.
+dist/
+.astro/
+
+# Vercel's local folder (only appears if you use the Vercel command line tool).
+.vercel/
+
+# macOS folder metadata.
+.DS_Store
+
+# Secrets and local settings. Never commit these.
+.env
+.env.*
+
+# Private source material (the original resume). Stays on your computer only.
+_source/
+
+# Temporary files from the resume PDF script.
+playwright-report/
+test-results/

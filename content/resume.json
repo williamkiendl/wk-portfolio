@@ -1,0 +1,108 @@
+{
+  "headline": "Staff-Level Design Program Leader",
+  "summary": "Design and production leader with 10+ years across big tech, startups, and culture. I've produced flagship moments for Google I/O and Meta Connect and built artist-first programs at Red Bull Music Academy and the MIT Media Lab. Today I lead brand design for Reality Labs Wearables, building first-party brands from scratch (Meta Glasses, Muse Charm) and leading partner brand work with EssilorLuxottica (Ray-Ban Meta, Oakley Meta). I'm at my best when the brief is undefined and the stakes are high.",
+  "experience": [
+    {
+      "org": "Meta, Reality Labs",
+      "orgNote": "Division behind Meta's AI glasses, wearables, and the Horizon platform.",
+      "role": "Design Program Lead, Reality Labs",
+      "start": "2021",
+      "end": "present",
+      "bullets": [
+        "Lead brand design operations for Meta's Wearables portfolio (4+ brands in market, 94% category share, +263% Y/Y growth). Own planning, resourcing, budget, cross-functional partnerships, and leadership reviews, directing a 10+ person multidisciplinary studio and agency partners against a fast-moving hardware roadmap.",
+        "Led the end-to-end creative program for Meta Connect 2025 (31+ people, 8+ workstreams). Built the governance model and cross-functional workflows, and delivered a new visual system and six films for the CEO keynote in under three weeks. Grew social reach 4x to 190M and livestream views 50% to 62M.",
+        "Launched first-party brands from scratch (Meta Glasses, Muse Charm) and led 0-to-1 partner brands with EssilorLuxottica (Oakley Meta, Meta Ray-Ban Display) from brand strategy through global launch.",
+        "Led creative for the Horizon Store, part of Reality Labs' most profitable business. Built a studio model with Product Design that shaped store UI and scaled to 250+ monetization campaigns a year, beating the revenue goal by 71% and halving agency costs.",
+        "Founded an in-house AI design lab to educate the team on generative tools, with a physical space in LA, hands-on workshops on AI in design practice, and an artist speaker series run with the creator team."
+      ],
+      "showOnHome": true
+    },
+    {
+      "org": "Oculus",
+      "orgNote": "VR and mixed reality division behind Horizon Venues.",
+      "role": "Senior Creative Producer",
+      "start": "2020",
+      "end": "2021",
+      "bullets": [
+        "Shipped the 0-to-1 live production pipeline for Horizon Venues, launching at Connect 2020 with tentpole shows from Steve Aoki, Major Lazer, and a TIDAL music series that drove a 25% lift in subscriptions and 8x weekly time spent in app."
+      ],
+      "showOnHome": true
+    },
+    {
+      "org": "Google",
+      "orgNote": "Events & Experiences team behind I/O, Made by Google, YouTube activations, and Cloud Next.",
+      "role": "Senior Producer, Experiential",
+      "start": "2018",
+      "end": "2020",
+      "bullets": [
+        "Turned product stories into physical experiences for 10K+ attendees across Google I/O, Made by Google Hardware Launch, Cloud Next London, and Zeitgeist.",
+        "Produced keynote demos, including the live Stadia launch at GDC 2019, and 100+ partner experiences for the THEA Award-winning Google Assistant Ride at CES 2019.",
+        "Led technical production and procurement for a $5M+ global hardware inventory, from central warehouse to on-site distribution for global activations."
+      ],
+      "showOnHome": true
+    },
+    {
+      "org": "Lightwave",
+      "orgNote": "Early-stage startup building biometric wearables for live entertainment.",
+      "role": "Producer",
+      "start": "2015",
+      "end": "2016",
+      "bullets": [
+        "Led activations at SXSW, the NCAA Men's Final Four, and Wimbledon for 20th Century Fox, Pepsi, Degree, and iHeartMedia. Managed $2M+ budgets; campaigns earned 40+ press features and 3.6M+ views."
+      ],
+      "showOnHome": true
+    },
+    {
+      "org": "Hacking Arts",
+      "orgNote": "Arts and technology festival at the MIT Media Lab.",
+      "role": "Executive Producer and Advisor",
+      "start": "2015",
+      "end": "2020",
+      "bullets": [
+        "Architected a festival for 750+ attendees. Grew attendance 50% and budget 75% with partners like Adobe, Google, and Sonos; featured in MIT News and The Atlantic."
+      ],
+      "showOnHome": true
+    },
+    {
+      "org": "Red Bull",
+      "orgNote": "Culture marketing across Red Bull Music Academy, Records, and Sound Select.",
+      "role": "Culture Marketing, Music",
+      "start": "2012",
+      "end": "2015",
+      "bullets": [
+        "Established Red Bull's first collegiate music pipeline, connecting Red Bull Music Academy, Sound Select, and Red Bull Records with the 18-24 demographic through campus activations and the first Berklee cohort at Red Bull Studios New York, driving brand impressions and campus engagement."
+      ],
+      "showOnHome": true
+    }
+  ],
+  "education": [
+    {
+      "school": "Berklee College of Music",
+      "detail": "B.M., Music Business/Management; Fellow, Berklee Institute of Creative Entrepreneurship"
+    },
+    {
+      "school": "Massachusetts Institute of Technology",
+      "detail": "Cross-registered student and TA, Program in Art, Science and Technology"
+    }
+  ],
+  "skills": [
+    "Program Management",
+    "Event & Experiential Design",
+    "Creative Production & Operations",
+    "Brand & Design Systems",
+    "Agency & Vendor Management",
+    "Cross-Functional & Stakeholder Leadership",
+    "AI-Enabled Workflows"
+  ],
+  "tools": [
+    "Figma",
+    "Claude Code",
+    "Cursor",
+    "GitHub",
+    "Jira",
+    "Asana",
+    "Midjourney",
+    "Adobe Creative Suite",
+    "Google Workspace"
+  ]
+}

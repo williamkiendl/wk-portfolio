@@ -1,0 +1,57 @@
+---
+/**
+ * Prose.astro
+ * Wraps long-form text (the body of a case study or post). It keeps lines
+ * to a readable length (--grid-measure) and spaces out the paragraphs,
+ * headings, lists and images that Markdown produces.
+ *
+ * It also marks any block still holding "[PLACEHOLDER ..." text, the same
+ * way the Text component does for short strings.
+ */
+import { markPlaceholders } from "@/lib/placeholder";
+
+// The finished HTML of whatever was placed inside <Prose> ... </Prose>.
+const html = markPlaceholders(await Astro.slots.render("default"));
+---
+
+<div class="prose" set:html={html} />
+
+<style>
+  .prose {
+    max-width: var(--grid-measure);
+  }
+
+  /* The content comes from Markdown, so these rules reach inside it. */
+  .prose :global(* + *) {
+    margin-block-start: var(--space-4);
+  }
+
+  .prose :global(h2),
+  .prose :global(h3),
+  .prose :global(h4) {
+    margin-block-start: var(--space-12);
+  }
+
+  .prose :global(h2) {
+    font-size: var(--text-xl);
+  }
+
+  .prose :global(h3) {
+    font-size: var(--text-lg);
+  }
+
+  .prose :global(li + li) {
+    margin-block-start: var(--space-2);
+  }
+
+  .prose :global(blockquote) {
+    padding-inline-start: var(--space-4);
+    border-inline-start: var(--border-width) solid var(--color-line);
+  }
+
+  .prose :global(pre) {
+    padding: var(--space-4);
+    overflow-x: auto;
+    background-color: var(--color-surface);
+  }
+</style>

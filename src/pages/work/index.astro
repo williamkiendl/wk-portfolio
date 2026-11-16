@@ -1,0 +1,24 @@
+---
+/**
+ * All work page (/work).
+ * Every live case study as a linked row, followed by the drafts as
+ * "Coming soon" rows with no link.
+ */
+import { getEntry } from "astro:content";
+import { site } from "@config";
+import { getAllWork, toWorkRow } from "@/lib/work";
+import Page from "@/layouts/Page.astro";
+import WorkList from "@/components/WorkList.astro";
+
+const home = (await getEntry("home", "home"))!.data;
+
+const work = await getAllWork();
+const rows = [
+  ...work.filter((entry) => !entry.data.draft),
+  ...work.filter((entry) => entry.data.draft),
+].map(toWorkRow);
+---
+
+<Page title={site.labels.allWork} intro={home.workIndex.intro}>
+  <WorkList items={rows} />
+</Page>
